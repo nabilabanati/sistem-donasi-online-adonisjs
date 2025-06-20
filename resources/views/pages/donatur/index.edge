@@ -1,0 +1,224 @@
+@layout.app({ title: "Welcome page title" })
+  <!-- Table Section -->
+  <div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+    <!-- Card -->
+    <div class="flex flex-col">
+      <div class="-m-1.5 overflow-x-auto">
+        <div class="p-1.5 min-w-full inline-block align-middle">
+          <div class="bg-white border border-gray-200 rounded-xl shadow-2xs overflow-hidden">
+            <!-- Header -->
+            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200">
+              <div>
+                <h2 class="text-xl font-semibold text-gray-800">
+                  Donatur
+                </h2>
+                <p class="text-sm text-gray-600">
+                  Kelola donatur
+                </p>
+              </div>
+
+              <div>
+                <div class="inline-flex gap-x-2">
+                  <a
+                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    href="{{ route('donatur.create') }}"
+                  >
+                    <svg
+                      class="shrink-0 size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="M12 5v14" />
+                    </svg>
+                    Tambah Donatur
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- End Header -->
+
+            <!-- Table -->
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="ps-6 pe-6 py-3 text-start">
+                    <span class="text-xs font-semibold uppercase text-gray-800">ID</span>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-start">
+                    <span class="text-xs font-semibold uppercase text-gray-800">Nama Donatur</span>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-start">
+                    <span class="text-xs font-semibold uppercase text-gray-800">Email</span>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-start">
+                    <span class="text-xs font-semibold uppercase text-gray-800">No. Telepon</span>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-start">
+                    <span class="text-xs font-semibold uppercase text-gray-800">Dibuat</span>
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-start">
+                    <span class="text-xs font-semibold uppercase text-gray-800">Aksi</span>
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-gray-200">
+                @each(donatur in donaturs)
+                  <tr class="opacity-100">
+                    <td class="size-px whitespace-nowrap">
+                      <div class="ps-6 pe-6 py-3">
+                        <span class="text-sm font-semibold text-gray-800">{{ donatur.id }}</span>
+                      </div>
+                    </td>
+                    <td class="h-px w-72 whitespace-nowrap">
+                      <div class="px-6 py-3">
+                        <span class="block text-sm font-semibold text-gray-800">{{ donatur.nama }}</span>
+                      </div>
+                    </td>
+                    <td class="h-px w-72 whitespace-nowrap">
+                      <div class="px-6 py-3">
+                        <span class="block text-sm font-semibold text-gray-800">{{ donatur.email }}</span>
+                      </div>
+                    </td>
+                    <td class="h-px w-72 whitespace-nowrap">
+                      <div class="px-6 py-3">
+                        <span class="block text-sm font-semibold text-gray-800">{{ donatur.telepon }}</span>
+                      </div>
+                    </td>
+                    <td class="size-px whitespace-nowrap">
+                      <div class="px-6 py-3">
+                        <span class="text-sm text-gray-500">{{ donatur.createdAt }}</span>
+                      </div>
+                    </td>
+                    <td class="size-px whitespace-nowrap">
+                      <div class="px-6 py-1.5">
+                        <div class="flex items-center gap-x-2">
+                          <a
+                            class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium"
+                            href="{{ route('donatur.show', [donatur.id]) }}"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="size-5"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                              />
+                            </svg>
+                            Lihat
+                          </a>
+
+                          <a
+                            class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium"
+                            href="{{ route('donatur.edit', [donatur.id]) }}"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="size-5"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                              />
+                            </svg>
+                            Edit
+                          </a>
+                          <form
+                            method="POST"
+                            action="{{ route('donatur.destroy', [donatur.id]) }}"
+                            class="flex items-center"
+                            onsubmit="return confirm('Apakah anda yakin ingin menghapus Donatur {{ donatur.nama }}?');"
+                          >
+                            <input type="hidden" name="_method" value="DELETE" />
+                            {{ csrfField() }}
+                          <button
+                              type="submit"
+                              class="inline-flex items-center gap-x-1 text-sm text-red-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium disabled:opacity-50"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-5"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                />
+                              </svg>
+                              Hapus
+                          </button>
+                          </form>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                @end
+                  
+                @if(!donaturs || donaturs.length === 0)
+                  <tr>
+                    <td colspan="6" class="text-center py-8">
+                      <div class="flex flex-col items-center justify-center gap-y-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6 text-sm text-gray-500"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                          />
+                        </svg>
+
+                        <p class="text-sm text-gray-500">
+                          Mulai dengan menambahkan donatur.
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                @endif
+                  
+              </tbody>
+
+            </table>
+            <!-- End Table -->
+
+            <!-- Footer -->
+            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200">
+
+            </div>
+            <!-- End Footer -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Card -->
+  </div>
+  <!-- End Table Section -->
+@end
