@@ -1,4 +1,4 @@
-@layout.app({ title: "Halaman Buat Kampanye" })
+@layout.app({ title: "Halaman Edit Kampanye" })
   <!-- Card Section -->
   <div class="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <!-- Card -->
@@ -9,7 +9,7 @@
         {{ csrfField() }}
         <div class="mb-4">
           <h2 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">
-            Tambah Kampanye
+            Edit Kampanye
           </h2>
         </div>
         <div class="mb-4">
@@ -18,48 +18,41 @@
             name="namaKampanye"
             id="nama_kampanye"
             type="text"
+            required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
             placeholder="Masukkan nama kampanye"
             value="{{ kampanye?.namaKampanye ?? '' }}"
           />
-          @error('nama_kampanye')
-            <span class="text-red-500 text-xs">{{ flashMessages.get('error') }}</span>
-          @enderror
         </div>
         <div class="mb-4">
           <label for="kategori_id" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Kategori Kampanye</label>
           <select
             name="kategoriId"
             id="kategori_id"
+            required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
           >
             <option value="">
               Pilih Kategori
             </option>
             @each(kategori in kategoris)
-              <option value="{{ kategori.id }}" @if(kampanye?.kategoriId == kategori.id) selected @endif>
+              <option value="{{ kategori.id }}" if @if(kampanye?.kategoriId == kategori.id) selected @end>
                 {{ kategori.namaKategori }}
               </option>
             @end
           </select>
-          @error('kategori_id')
-            <span class="text-red-500 text-xs">{{ flashMessages.get('error') }}</span>
-          @enderror
         </div>
-
         <div class="mb-4">
           <label for="target" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Target Donasi</label>
           <input
             name="target"
             id="target"
             type="number"
+            required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
             placeholder="Masukkan target donasi"
             value="{{ kampanye?.target ?? '' }}"
           />
-          @error('target')
-            <span class="text-red-500 text-xs">{{ flashMessages.get('error') }}</span>
-          @enderror
         </div>
         <div class="flex gap-2">
           <a
@@ -67,13 +60,13 @@
             class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
           >
             Batal
-                </a>
+          </a>
           <button
             type="submit"
             class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700"
           >
-            Tambah Kampanye 
-                </button>
+            Simpan Kampanye 
+          </button>
         </div>
       </form>
     </div>

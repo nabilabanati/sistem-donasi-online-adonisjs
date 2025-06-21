@@ -1,4 +1,4 @@
-@layout.app({ title: "Halaman Buat Kampanye" })
+@layout.app({ title: "Edit Donasi" })
   <!-- Card Section -->
   <div class="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <!-- Card -->
@@ -9,7 +9,7 @@
         {{ csrfField() }}
         <div class="mb-4">
           <h2 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">
-            Tambah Donasi
+            Edit Donasi
           </h2>
         </div>
         <div class="mb-4">
@@ -24,7 +24,7 @@
               Pilih Donatur
             </option>
             @each(donatur in donaturs)
-              <option value="{{ donatur.id }}" @if(donatur?.donaturId == donaturId) selected @endif>
+              <option value="{{ donatur.id }}" @if(donatur.id == donasi?.donaturId) selected @endif>
                 {{ donatur.nama }}
               </option>
             @end
@@ -54,6 +54,7 @@
             name="tanggal"
             id="tanggal"
             type="date"
+            required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
           />
         </div>
@@ -64,6 +65,7 @@
             name="jumlah"
             id="jumlah"
             type="number"
+            required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
             placeholder="Masukkan jumlah donasi"
             value="{{ donasi?.jumlah ?? '' }}"

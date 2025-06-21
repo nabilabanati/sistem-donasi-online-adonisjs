@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      {{ title || "SIDO" }}
+    </title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if ($slots.meta)
+      {{{ await $slots.meta() }}}
+    @endif
+  </head>
+  <!-- End Content -->
+  <body class="bg-gray-100 flex h-full items-center py-16">
+    <!-- Content -->
+    <div id="main" class="w-full max-w-md mx-auto">
+      {{{ await $slots.main() }}}
+    </div>
+    <!-- End Content -->
+  </body>
+</html>

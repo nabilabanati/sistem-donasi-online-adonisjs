@@ -1,4 +1,4 @@
-@layout.app({ title: "Welcome page title" })
+@layout.app({ title: "Halaman Kelola Kampanye" })
   <!-- Table Section -->
   <div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <!-- Card -->
@@ -51,40 +51,30 @@
                 <tr>
                   <th scope="col" class="ps-6 pe-6 py-3 text-start">
                     <div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase text-gray-800">
-                        ID
-                      </span>
+                      <span class="text-xs font-semibold uppercase text-gray-800">ID</span>
                     </div>
                   </th>
 
                   <th scope="col" class="px-6 py-3 text-start">
                     <div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase text-gray-800">
-                        Nama Kampanye
-                      </span>
+                      <span class="text-xs font-semibold uppercase text-gray-800">Nama Kampanye</span>
                     </div>
                   </th>
 
                   <th scope="col" class="px-6 py-3 text-start">
                     <div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase text-gray-800">
-                        Kategori
-                      </span>
+                      <span class="text-xs font-semibold uppercase text-gray-800">Kategori</span>
                     </div>
                   </th>
 
                   <th scope="col" class="px-6 py-3 text-start">
                     <div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase text-gray-800">
-                        Target
-                      </span>
+                      <span class="text-xs font-semibold uppercase text-gray-800">Target</span>
                     </div>
                   </th>
 
                   <th scope="col" class="px-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">
-                      Aksi
-                    </span>
+                    <span class="text-xs font-semibold uppercase text-gray-800">Aksi</span>
                   </th>
                 </tr>
               </thead>
@@ -104,7 +94,11 @@
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">
                       <div class="px-6 py-3">
-                        <span class="block text-sm font-semibold text-gray-800">{{ kampanye.kategori.namaKategori }}</span>
+                        <span
+                          class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500"
+                        >
+                          {{ kampanye.kategori.namaKategori }}
+                        </span>
                       </div>
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">
@@ -112,7 +106,7 @@
                         <span class="block text-sm font-semibold text-gray-800">{{ new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(kampanye.target) }}</span>
                       </div>
                     </td>
-                                        <td class="size-px whitespace-nowrap">
+                    <td class="size-px whitespace-nowrap">
                       <div class="px-6 py-1.5">
                         <div class="flex items-center gap-x-2">
                           <a

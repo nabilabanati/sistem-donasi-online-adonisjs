@@ -1,4 +1,4 @@
-@layout.app({ title: "Welcome page title" })
+@layout.app({ title: "Halaman Tambah Donatur" })
   <!-- Card Section -->
   <div class="max-w-2xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <!-- Card -->
@@ -19,6 +19,7 @@
             name="nama"
             id="nama"
             type="text"
+            required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
             placeholder="Masukkan nama donatur"
           />
@@ -29,43 +30,39 @@
             name="email"
             id="email"
             type="email"
+            required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
             placeholder="Masukkan email donatur"
           />
-            @error('email')
-            <span class="text-red-500 text-xs">{{ flashMessages.get('error') }}</span>          
-            @enderror
         </div>
-
         <div class="mb-4">
           <label for="telepon" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Telepon</label>
           <input
             name="telepon"
             id="telepon"
             type="text"
+            required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
             placeholder="Masukkan nomor telepon"
           />
-            @error('telepon')
-            <span class="text-red-500 text-xs">{{ flashMessages.get('error') }}</span>          
-            @enderror
         </div>
+
         <div class="flex gap-2">
-        <a
-          href="{{ route('donatur.index') }}"
-          class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-        >
-          Batal
+          <a
+            href="{{ route('donatur.index') }}"
+            class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+          >
+            Batal
         </a>
-        <button
-          type="submit"
-          class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700"
-        >
-          Tambah Donasi
+          <button
+            type="submit"
+            class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700"
+          >
+            Tambah Donasi
         </button>
+        </div>
       </div>
-      </div>
-      
+
     </form>
   </div>
   <!-- End Card -->
