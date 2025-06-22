@@ -51,7 +51,7 @@
                 <tr>
                   <th scope="col" class="ps-6 pe-6 py-3 text-start">
                     <div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase text-gray-800">ID</span>
+                      <span class="text-xs font-semibold uppercase text-gray-800">NO</span>
                     </div>
                   </th>
 
@@ -66,10 +66,21 @@
                       <span class="text-xs font-semibold uppercase text-gray-800">Kategori</span>
                     </div>
                   </th>
-
                   <th scope="col" class="px-6 py-3 text-start">
                     <div class="flex items-center gap-x-2">
                       <span class="text-xs font-semibold uppercase text-gray-800">Target</span>
+                    </div>
+                  </th>
+
+                  <th scope="col" class="px-6 py-3 text-start">
+                    <div class="flex items-center gap-x-2">
+                      <span class="text-xs font-semibold uppercase text-gray-800">Terkumpul</span>
+                    </div>
+                  </th>
+
+                  <th scope="col" class="px-6 py-3 text-start">
+                    <div class="flex items-center gap-x-2">
+                      <span class="text-xs font-semibold uppercase text-gray-800">Progress</span>
                     </div>
                   </th>
 
@@ -80,11 +91,11 @@
               </thead>
 
               <tbody class="divide-y divide-gray-200">
-                @each(kampanye in kampanyes)
+                @each((kampanye, index) in kampanyes)
                   <tr class="opacity-100">
                     <td class="size-px whitespace-nowrap">
                       <div class="ps-6 pe-6 py-3">
-                        <span class="text-sm font-semibold text-gray-800">{{ kampanye.id }}</span>
+                        <span class="text-sm font-semibold text-gray-800">{{ index+1 }}</span>
                       </div>
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">
@@ -104,6 +115,35 @@
                     <td class="h-px w-72 whitespace-nowrap">
                       <div class="px-6 py-3">
                         <span class="block text-sm font-semibold text-gray-800">{{ new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(kampanye.target) }}</span>
+                      </div>
+                    </td>
+                    <td class="h-px w-72 whitespace-nowrap">
+                      <div class="px-6 py-3">
+                        <span class="block text-sm font-semibold text-gray-800">{{ new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(kampanye.totalTerkumpul || 0) }}</span>
+                        <span class="block text-xs text-gray-500">dari {{ new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(kampanye.target) }}</span>
+                      </div>
+                    </td>
+                    <td class="h-px w-72 whitespace-nowrap">
+                      <div class="px-6 py-3">
+                        <div class="flex items-center gap-x-3">
+                          <div class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div
+                              class="flex flex-col justify-center overflow-hidden {{ kampanye.persentase >= 100 ? 'bg-green-500' : kampanye.persentase >= 75 ? 'bg-blue-500' : kampanye.persentase >= 50 ? 'bg-yellow-500' : 'bg-red-500' }}"
+                              style="width: {{ Math.min(kampanye.persentase || 0, 100) }}%"
+                            >
+                            </div>
+                          </div>
+                          <div class="w-10 text-end">
+                            <span class="text-sm text-gray-800">{{ kampanye.persentase || 0 }}%</span>
+                          </div>
+                        </div>
+                        @if(kampanye.persentase >= 100)
+                          <span
+                            class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-2"
+                          >
+                            🎉 Target Tercapai
+                          </span>
+                        @endif
                       </div>
                     </td>
                     <td class="size-px whitespace-nowrap">
@@ -163,7 +203,6 @@
                     </td>
                   </tr>
                 @end
-                  
                 @if(!kampanyes || kampanyes.length === 0)
                   <tr>
                     <td colspan="7" class="text-center py-8">

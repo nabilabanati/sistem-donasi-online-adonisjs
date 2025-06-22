@@ -4,14 +4,24 @@
     <!-- Card -->
     <div
       class="bg-white rounded-xl shadow-xs p-4 sm:p-7 dark:bg-neutral-900 border border-gray-200 xl:shadow-2xs"
-    >
-      <form action="{{ route('donasi.update', { id: donasi?.id }) }}" method="POST">
+    >      <form action="{{ route('donasi.update', { id: donasi?.id }) }}" method="POST">
         {{ csrfField() }}
         <div class="mb-4">
           <h2 class="text-lg font-semibold text-gray-800 dark:text-neutral-200">
             Edit Donasi
           </h2>
         </div>
+        {{-- Flash Messages --}}
+        @if(flashMessages.has('success'))
+          <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded dark:bg-green-800/30 dark:border-green-800 dark:text-green-500">
+            {{ flashMessages.get('success') }}
+          </div>
+        @endif
+        @if(flashMessages.has('error'))
+          <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded dark:bg-red-800/30 dark:border-red-800 dark:text-red-500">
+            {{ flashMessages.get('error') }}
+          </div>
+        @endif
         <div class="mb-4">
           <label for="donaturId" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Nama Donatur</label>
           <select
@@ -29,24 +39,40 @@
               </option>
             @end
           </select>
-        </div>
-        <div class="mb-4">
+        </div>        <div class="mb-4">
           <label for="kampanyeId" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Nama Kampanye</label>
           <select
             name="kampanyeId"
             id="kampanyeId"
             required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
+            onchange="updateTargetInfo()"
           >
             <option value="">
               Pilih Kampanye
             </option>
             @each(kampanye in kampanyes)
-              <option value="{{ kampanye.id }}" {{ donasi.transaksiDonasi?.kampanyeId === kampanye.id ? 'selected' : '' }}>
+              <option value="{{ kampanye.id }}" 
+                      data-target="{{ kampanye.target }}" 
+                      data-kategori="{{ kampanye.kategori.namaKategori }}"
+                      {{ donasi.transaksiDonasi?.kampanyeId === kampanye.id ? 'selected' : '' }}>
                 {{ kampanye.namaKampanye }}
               </option>
             @end
           </select>
+          <div id="kampanyeInfo" class="mt-2 hidden">
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900/30 dark:border-blue-800">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                <div class="text-sm">
+                  <p><strong>Target Kampanye:</strong> <span id="targetAmount"></span></p>
+                  <p><strong>Kategori:</strong> <span id="kategoriName"></span></p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 <div class="mb-4">
   <label for="tanggal" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Tanggal Donasi</label>
@@ -63,19 +89,31 @@
       {{ flashMessages.get('errors.tanggal') }}
     </p>
   @endif
-</div>
-
-        <div class="mb-4">
+</div>        <div class="mb-4">
           <label for="jumlah" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Jumlah Donasi</label>
           <input
             name="jumlah"
             id="jumlah"
             type="number"
             required
+            min="1"
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
             placeholder="Masukkan jumlah donasi"
             value="{{ donasi?.jumlah ?? '' }}"
+            oninput="validateAmount()"
           />
+          <div id="amountWarning" class="mt-2 hidden">
+            <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg dark:bg-yellow-900/30 dark:border-yellow-800">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                <div class="text-sm text-yellow-700 dark:text-yellow-300">
+                  <p id="warningMessage"></p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="flex gap-2">
           <a
@@ -89,11 +127,70 @@
             class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700"
           >
             Simpan Donasi 
-          </button>
-        </div>
+          </button>        </div>
       </form>
     </div>
     <!-- End Card -->
   </div>
   <!-- End Card Section -->
+    <script>
+    function updateTargetInfo() {
+      const select = document.getElementById('kampanyeId');
+      const selectedOption = select.options[select.selectedIndex];
+      const infoDiv = document.getElementById('kampanyeInfo');
+      
+      if (selectedOption.value) {
+        const target = selectedOption.getAttribute('data-target');
+        const kategori = selectedOption.getAttribute('data-kategori');
+        
+        document.getElementById('targetAmount').textContent = new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR'
+        }).format(target);
+        
+        document.getElementById('kategoriName').textContent = kategori;
+        infoDiv.classList.remove('hidden');
+      } else {
+        infoDiv.classList.add('hidden');
+      }
+      
+      // Reset warning saat ganti kampanye
+      validateAmount();
+    }
+    
+    function validateAmount() {
+      const select = document.getElementById('kampanyeId');
+      const amountInput = document.getElementById('jumlah');
+      const warningDiv = document.getElementById('amountWarning');
+      const warningMessage = document.getElementById('warningMessage');
+      
+      const selectedOption = select.options[select.selectedIndex];
+      const amount = parseFloat(amountInput.value);
+      
+      if (selectedOption.value && amount > 0) {
+        const target = parseFloat(selectedOption.getAttribute('data-target'));
+        
+        if (amount > target) {
+          warningMessage.textContent = `Jumlah donasi melebihi target kampanye! Target maksimal: ${new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+          }).format(target)}`;
+          warningDiv.classList.remove('hidden');
+          amountInput.classList.add('border-yellow-500', 'focus:border-yellow-500');
+        } else {
+          warningDiv.classList.add('hidden');
+          amountInput.classList.remove('border-yellow-500', 'focus:border-yellow-500');
+        }
+      } else {
+        warningDiv.classList.add('hidden');
+        amountInput.classList.remove('border-yellow-500', 'focus:border-yellow-500');
+      }
+    }
+    
+    // Tampilkan info kampanye yang sudah dipilih saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+      updateTargetInfo();
+      validateAmount();
+    });
+  </script>
 @end

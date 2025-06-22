@@ -83,6 +83,7 @@ router
         router.get('/:id', [DonasisController, 'show']).as('show')
         router.get('/:id/edit', [DonasisController, 'edit']).as('edit')
         router.post('/:id/edit', [DonasisController, 'update']).as('update')
+        router.post('/:id/updateStatus', [DonasisController, 'updateStatus']).as('updateStatus')
         router.post('/:id/delete', [DonasisController, 'destroy']).as('destroy')
       })
       .prefix('/donasi')

@@ -74,11 +74,11 @@
               </thead>
 
               <tbody class="divide-y divide-gray-200">
-                @each(kategori in kategori)
+                @each((kategori, index) in kategori)
                   <tr class="opacity-100">
                     <td class="size-px whitespace-nowrap">
                       <div class="ps-6 pe-6 py-3">
-                        <span class="text-sm font-semibold text-gray-800">{{ kategori.id }}</span>
+                        <span class="text-sm font-semibold text-gray-800">{{ index+1 }}</span>
                       </div>
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">

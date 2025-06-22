@@ -34,7 +34,7 @@ export default class DonasisController {
         .from('transaksi_donasis')
         .join('donasis', 'transaksi_donasis.donasi_id', 'donasis.id')
         .where('transaksi_donasis.kampanye_id', data.kampanyeId)
-        .where('transaksi_donasis.status', 'SUCCESS')
+        .where('transaksi_donasis.status', 'terverifikasi')
         .sum('donasis.jumlah as total')
         .first()
 
@@ -104,13 +104,36 @@ export default class DonasisController {
     const kampanyes = await Kampanye.query().preload('kategori')
     return view.render('pages/donasi/edit', { donasi, donaturs, kampanyes })
   }
-
   public async update({ request, response, params, session }: HttpContext) {
     const trx = await db.transaction()
     try {
       const donasi = await Donasi.findOrFail(params.id)
       const data = request.only(['donaturId', 'kategoriId', 'jumlah', 'tanggal', 'kampanyeId'])
       const kampanye = await Kampanye.findOrFail(data.kampanyeId)
+
+      // Hitung total donasi terkumpul (exclude donasi yang sedang diedit)
+      const totalDonasiTerkumpul = await db
+        .from('transaksi_donasis')
+        .join('donasis', 'transaksi_donasis.donasi_id', 'donasis.id')
+        .where('transaksi_donasis.kampanye_id', data.kampanyeId)
+        .where('transaksi_donasis.status', 'terverifikasi')
+        .where('donasis.id', '!=', donasi.id) // Exclude donasi yang sedang diedit
+        .sum('donasis.jumlah as total')
+        .first()
+
+      const donasiTerkumpul = totalDonasiTerkumpul?.total || 0
+      const sisaTarget = kampanye.target - donasiTerkumpul
+
+      // Validasi: donasi yang diedit tidak boleh melebihi sisa target
+      if (data.jumlah > sisaTarget) {
+        session.flash(
+          'error',
+          `Donasi melebihi target kampanye! Target: Rp ${kampanye.target.toLocaleString('id-ID')}, ` +
+            `Terkumpul: Rp ${donasiTerkumpul.toLocaleString('id-ID')}, ` +
+            `Sisa: Rp ${sisaTarget.toLocaleString('id-ID')}`
+        )
+        return response.redirect().back()
+      }
 
       donasi.merge({
         donaturId: data.donaturId,
@@ -145,21 +168,22 @@ export default class DonasisController {
   public async updateStatus({ request, response, params, session }: HttpContext) {
     try {
       const { status } = request.only(['status'])
-      if (!['pending', 'terverifikasi', 'gagal'].includes(status)) {
+      // Validasi status yang diizinkan
+      const allowedStatuses = ['pending', 'terverifikasi', 'gagal']
+      if (!allowedStatuses.includes(status)) {
         session.flash('error', 'Status tidak valid.')
-        response.redirect().back()
-        return
+        return response.redirect().back()
       }
 
       const transaksi = await TransaksiDonasi.query().where('donasiId', params.id).firstOrFail()
-
       await transaksi.merge({ status }).save()
 
       session.flash('success', 'Status donasi berhasil diperbarui.')
-      response.redirect().toRoute('donasi.index')
+      return response.redirect().toRoute('donasi.index')
     } catch (error) {
+      console.error('Error updating donation status:', error)
       session.flash('error', 'Gagal memperbarui status donasi.')
-      response.redirect().back()
+      return response.redirect().back()
     }
   }
 
