@@ -1,126 +1,147 @@
 @layout.app({ title: "Halaman Donasi" })
-  <!-- Table Section -->
-  <div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-    <!-- Card -->
-    <div class="flex flex-col">
-      <div class="-m-1.5 overflow-x-auto">
-        <div class="p-1.5 min-w-full inline-block align-middle">
-          <div class="bg-white border border-gray-200 rounded-xl shadow-2xs overflow-hidden">
-            <!-- Header -->
-            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200">
-              <div>
-                <h2 class="text-xl font-semibold text-gray-800">
-                  Donasi
-                </h2>
-                <p class="text-sm text-gray-600">
-                  Kelola donasi dan status transaksi
-                </p>
-              </div>
+<div class="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+  <div class="flex flex-col">
+    <div class="-m-1.5 overflow-x-auto">
+      <div class="p-1.5 min-w-full inline-block align-middle">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-2xs overflow-hidden dark:bg-neutral-900 dark:border-neutral-700">
+          <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
+            <div>
+              <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+                Donasi
+              </h2>
+              <p class="text-sm text-gray-600 dark:text-neutral-400">
+                Kelola donasi dan status transaksi
+              </p>
+            </div>
 
-              <div>
-                <div class="inline-flex gap-x-2">
-                  <a
-                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                    href="{{ route('donasi.create') }}"
+            <div>
+              <div class="inline-flex gap-x-2">
+                <a
+                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                  href="{{ route('donasi.create') }}"
+                >
+                  <svg
+                    class="shrink-0 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   >
-                    <svg
-                      class="shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="M12 5v14" />
-                    </svg>
-                    Tambah Donasi
-                  </a>
-                </div>
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                  </svg>
+                  Tambah Donasi
+                </a>
               </div>
             </div>
-            <!-- End Header -->
+          </div>
+          {{-- Flash Messages (jika ada) --}}
+          @if(flashMessages.has('success'))
+          <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded dark:bg-green-800/30 dark:border-green-800 dark:text-green-500">
+            {{ flashMessages.get('success') }}
+          </div>
+          @endif
+          @if(flashMessages.has('error'))
+          <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded dark:bg-red-800/30 dark:border-red-800 dark:text-red-500">
+            {{ flashMessages.get('error') }}
+          </div>
+          @endif
 
-            <!-- Table -->
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+          @if(donasis && donasis.length > 0)
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+              <thead class="bg-gray-50 dark:bg-neutral-800">
                 <tr>
                   <th scope="col" class="ps-6 pe-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">ID</span>
+                    <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-400">ID</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">Donatur</span>
+                    <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-400">Donatur</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">Kampanye</span>
+                    <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-400">Kampanye</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">Kategori</span>
+                    <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-400">Kategori</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">Jumlah</span>
+                    <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-400">Jumlah</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">Tanggal</span>
+                    <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-400">Tanggal</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">Status</span>
+                    <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-400">Status</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-start">
-                    <span class="text-xs font-semibold uppercase text-gray-800">Aksi</span>
+                    <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-400">Aksi</span>
                   </th>
                 </tr>
               </thead>
 
-              <tbody class="divide-y divide-gray-200">
+              <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                 @each(donasi in donasis)
-                  <tr class="opacity-100">
+                  <tr class="opacity-100 bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
                     <td class="size-px whitespace-nowrap">
                       <div class="ps-6 pe-6 py-3">
-                        <span class="text-sm font-semibold text-gray-800">{{ donasi.id }}</span>
+                        <span class="text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ donasi.id }}</span>
                       </div>
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">
                       <div class="px-6 py-3">
-                        <span class="block text-sm font-semibold text-gray-800">{{ donasi.donatur.nama }}</span>
-                        <span class="block text-xs text-gray-500">{{ donasi.donatur.email || '-' }}</span>
+                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ donasi.donatur?.nama ?? '-' }}</span>
+                        <span class="block text-xs text-gray-500 dark:text-neutral-400">{{ donasi.donatur?.email || '-' }}</span>
                       </div>
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">
                       <div class="px-6 py-3">
-                        <span class="block text-sm font-semibold text-gray-800">
-                          {{ donasi.transaksiDonasi && donasi.transaksiDonasi.kampanye ? donasi.transaksiDonasi.kampanye.namaKampanye : '-' }}
+                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                          {{ donasi.transaksiDonasi?.kampanye?.namaKampanye ?? '-' }}
                         </span>
                       </div>
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">
                       <div class="px-6 py-3">
-                        <span class="block text-sm font-semibold text-gray-800">{{ donasi.kategori.namaKategori }}</span>
+                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ donasi.kategori?.namaKategori ?? '-' }}</span>
                       </div>
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">
                       <div class="px-6 py-3">
-                        <span class="block text-sm font-semibold text-gray-800">{{ new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(donasi.jumlah) }}</span>
+                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(donasi.jumlah || 0) }}</span>
                       </div>
                     </td>
                     <td class="h-px w-72 whitespace-nowrap">
                       <div class="px-6 py-3">
-                        <span class="block text-sm font-semibold text-gray-800">{{ donasi.tanggal.toFormat('dd/MM/yyyy') }}</span>
+                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ donasi.tanggal?.toFormat('dd/MM/yyyy') ?? '-' }}</span>
                       </div>
                     </td>
+                    {{-- Kolom Status dengan Dropdown --}}
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <form action="{{ route('donasi.updateStatus', { id: donasi.id }) }}" method="POST" class="inline-block">
+                        {{ csrfField() }}
+                        <select name="status"
+                                onchange="this.form.submit()"
+                                class="py-1.5 px-2 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400"
+                        >
+                          <option value="pending" {{ donasi.transaksiDonasi?.status === 'pending' ? 'selected' : '' }}>Pending</option>
+                          <option value="terverifikasi" {{ donasi.transaksiDonasi?.status === 'terverifikasi' ? 'selected' : '' }}>Terverifikasi</option>
+                          <option value="gagal" {{ donasi.transaksiDonasi?.status === 'gagal' ? 'selected' : '' }}>Gagal</option>
+                        </select>
+                      </form>
+                    </td>
+                    {{-- Akhir Kolom Status --}}
 
                     <td class="size-px whitespace-nowrap">
                       <div class="px-6 py-1.5">
                         <div class="flex items-center gap-x-2">
-                          
-                          <!-- Edit Button -->
                           <a
-                            class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium"
-                            href="{{ route('donasi.edit', [donasi.id]) }}"
+                            class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500 dark:hover:text-blue-400"
+                            href="{{ route('donasi.edit', { id: donasi.id }) }}"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -139,108 +160,9 @@
                             Edit
                           </a>
                           
-                          <!-- Status Update Dropdown -->
-                          {{-- @if(donasi.transaksiDonasi && donasi.transaksiDonasi.status === 'terverifikasi')
-                            <div class="hs-dropdown relative inline-flex">
-                              <button
-                                id="hs-dropdown-{{ donasi.id }}"
-                                type="button"
-                                class="hs-dropdown-toggle inline-flex items-center gap-x-1 text-sm text-orange-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke-width="1.5"
-                                  stroke="currentColor"
-                                  class="size-4"
-                                >
-                                  <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                                  />
-                                </svg>
-                                Status
-                                <svg
-                                  class="hs-dropdown-open:rotate-180 size-2.5"
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M2 5L8.16086 10.6869C8.35239 10.8637 8.64761 10.8637 8.83914 10.6869L15 5"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                  />
-                                </svg>
-                              </button>
-                              
-                              <div
-                                class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg p-2 mt-2 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full z-10"
-                                aria-labelledby="hs-dropdown-{{ donasi.id }}"
-                              >
-                                <form method="POST" action="{{ route('donasi.updateStatus', [donasi.id]) }}">
-                                  {{ csrfField() }}
-                                  <input type="hidden" name="status" value="terverifikasi">
-                                  <button
-                                    type="submit"
-                                    class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-green-800 hover:bg-green-100 focus:outline-none focus:bg-green-100 w-full text-left"
-                                  >
-                                    <svg
-                                      class="shrink-0 size-4"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="24"
-                                      height="24"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      stroke-width="2"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                    >
-                                      <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                    Verifikasi
-                                  </button>
-                                </form>
-                                
-                                <form method="POST" action="{{ route('donasi.updateStatus', [donasi.id]) }}">
-                                  {{ csrfField() }}
-                                  <input type="hidden" name="status" value="gagal">
-                                  <button
-                                    type="submit"
-                                    class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-red-800 hover:bg-red-100 focus:outline-none focus:bg-red-100 w-full text-left"
-                                  >
-                                    <svg
-                                      class="shrink-0 size-4"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="24"
-                                      height="24"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      stroke-width="2"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                    >
-                                      <path d="M18 6L6 18"></path>
-                                      <path d="M6 6l12 12"></path>
-                                    </svg>
-                                    Tolak
-                                  </button>
-                                </form>
-                              </div>
-                            </div>
-                          @endif --}}
-
-                          <!-- Delete Button -->
                           <form
                             method="POST"
-                            action="{{ route('donasi.destroy', [donasi.id]) }}"
+                            action="{{ route('donasi.destroy', { id: donasi.id }) }}"
                             class="flex items-center"
                             onsubmit="return confirm('Apakah anda yakin ingin menghapus donasi ini?');"
                           >
@@ -248,7 +170,7 @@
                             {{ csrfField() }}
                             <button
                               type="submit"
-                              class="inline-flex items-center gap-x-1 text-sm text-red-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium disabled:opacity-50"
+                              class="inline-flex items-center gap-x-1 text-sm text-red-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium disabled:opacity-50 dark:text-red-500 dark:hover:text-red-400"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -272,59 +194,57 @@
                     </td>
                   </tr>
                 @end
-
-                {{-- @if(!donasis || donasis.length === 0)
-                  <tr>
-                    <td colspan="8" class="text-center py-8">
-                      <div class="flex flex-col items-center justify-center gap-y-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="size-12 text-gray-400"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                          />
-                        </svg>
-                        <div class="max-w-sm mx-auto">
-                          <p class="mt-2 text-sm text-gray-600">
-                            Belum ada donasi yang tercatat
-                          </p>
-                          <p class="text-sm text-gray-600">
-                            Mulai dengan menambahkan donasi pertama.
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                @endif --}}
               </tbody>
             </table>
-            <!-- End Table -->
-
-            <!-- Footer -->
-            <div class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-gray-200">
-              {{-- <div>
-                <p class="text-sm text-gray-600">
-                  @if(donasis && donasis.length > 0)
-                    Menampilkan {{ donasis.length }} donasi
-                  @else
-                    Tidak ada donasi
-                  @endif
-                </p>
-              </div> --}}
-            </div>
-            <!-- End Footer -->
           </div>
+          @else
+          {{-- Empty state when no donations --}}
+          <div class="px-6 py-12 text-center">
+            <div class="flex flex-col items-center justify-center">
+              <svg
+                class="w-12 h-12 text-gray-400 mb-4 dark:text-neutral-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <h3 class="text-lg font-medium text-gray-900 mb-2 dark:text-neutral-200">
+                Belum Ada Donasi
+              </h3>
+              <p class="text-gray-500 mb-6 dark:text-neutral-400">
+                Saat ini belum ada donasi yang tercatat.
+              </p>
+              <a
+                href="{{ route('donasi.create') }}"
+                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-600"
+              >
+                <svg
+                  class="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                Tambah Donasi Baru
+              </a>
+            </div>
+          </div>
+          @endif
         </div>
       </div>
     </div>
-    <!-- End Card -->
   </div>
-  <!-- End Table Section -->
+  </div>
 @end

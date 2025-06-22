@@ -24,7 +24,7 @@
               Pilih Donatur
             </option>
             @each(donatur in donaturs)
-              <option value="{{ donatur.id }}" @if(donatur.id == donasi?.donaturId) selected @endif>
+              <option value="{{ donatur.id }}" {{ donasi?.donaturId === donatur.id ? 'selected' : '' }}>
                 {{ donatur.nama }}
               </option>
             @end
@@ -42,22 +42,28 @@
               Pilih Kampanye
             </option>
             @each(kampanye in kampanyes)
-              <option value="{{ kampanye.id }}" @if(kampanye?.kampanyeId == kampanyeId) selected @endif>
+              <option value="{{ kampanye.id }}" {{ donasi.transaksiDonasi?.kampanyeId === kampanye.id ? 'selected' : '' }}>
                 {{ kampanye.namaKampanye }}
               </option>
             @end
           </select>
         </div>
-        <div class="mb-4">
-          <label for="tanggal" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Tanggal Donasi</label>
-          <input
-            name="tanggal"
-            id="tanggal"
-            type="date"
-            required
-            class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
-          />
-        </div>
+<div class="mb-4">
+  <label for="tanggal" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Tanggal Donasi</label>
+  <input
+    name="tanggal"
+    id="tanggal"
+    type="date"
+    required
+    class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
+    value="{{ donasi?.tanggal?.toISODate() ?? flashMessages.get('old.tanggal') ?? '' }}" {{-- Perbaikan di sini --}}
+  />
+  @if(flashMessages.has('errors.tanggal'))
+    <p class="text-xs text-red-600 mt-2">
+      {{ flashMessages.get('errors.tanggal') }}
+    </p>
+  @endif
+</div>
 
         <div class="mb-4">
           <label for="jumlah" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Jumlah Donasi</label>
@@ -82,8 +88,8 @@
             type="submit"
             class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700"
           >
-            Tambah Kampanye 
-                </button>
+            Simpan Donasi 
+          </button>
         </div>
       </form>
     </div>

@@ -30,6 +30,28 @@ export default class DonasisController {
       const data = request.only(['donaturId', 'kategoriId', 'jumlah', 'tanggal', 'kampanyeId'])
       const kampanye = await Kampanye.findOrFail(data.kampanyeId)
 
+      const totalDonasiTerkumpul = await db
+        .from('transaksi_donasis')
+        .join('donasis', 'transaksi_donasis.donasi_id', 'donasis.id')
+        .where('transaksi_donasis.kampanye_id', data.kampanyeId)
+        .where('transaksi_donasis.status', 'SUCCESS')
+        .sum('donasis.jumlah as total')
+        .first()
+
+      const donasiTerkumpul = totalDonasiTerkumpul?.total || 0
+      const sisaTarget = kampanye.target - donasiTerkumpul
+
+      // Validasi: donasi tidak boleh melebihi sisa target
+      if (data.jumlah > sisaTarget) {
+        session.flash(
+          'error',
+          `Donasi melebihi target kampanye! Target: Rp ${kampanye.target.toLocaleString('id-ID')}, ` +
+            `Terkumpul: Rp ${donasiTerkumpul.toLocaleString('id-ID')}, ` +
+            `Sisa: Rp ${sisaTarget.toLocaleString('id-ID')}`
+        )
+        return response.redirect().back()
+      }
+
       const donasi = await Donasi.create(
         {
           donaturId: data.donaturId,
@@ -51,7 +73,7 @@ export default class DonasisController {
       )
 
       await trx.commit()
-      session.flash('success', 'Donasi berhasil disimpan.')
+      session.flash('success', 'Donasi berhasil ditambahkan')
       response.redirect().toRoute('donasi.index')
     } catch (error) {
       console.error(error)

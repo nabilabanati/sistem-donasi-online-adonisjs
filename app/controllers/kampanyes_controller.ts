@@ -5,7 +5,11 @@ import Kategori from '#models/kategori'
 
 export default class KampanyesController {
     public async index({ view }: HttpContext) {
-        const kampanyes = await Kampanye.query().preload('kategori')
+    const kampanyes = await Kampanye.query()
+      .preload('kategori')
+      .preload('transaksiDonasi', (query) => {
+        query.where('status', 'terverifikasi').preload('donasi')
+      })
         return view.render('pages/kampanye/index', { kampanyes })
     }
     

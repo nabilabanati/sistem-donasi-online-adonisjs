@@ -13,10 +13,10 @@
           </h2>
         </div>
         <div class="mb-4">
-          <label for="nama_kampanye" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Nama Kampanye</label>
+          <label for="namaKampanye" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Nama Kampanye</label>
           <input
             name="namaKampanye"
-            id="nama_kampanye"
+            id="namaKampanyee"
             type="text"
             required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
@@ -25,10 +25,10 @@
           />
         </div>
         <div class="mb-4">
-          <label for="kategori_id" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Kategori Kampanye</label>
+          <label for="kategoriId" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Kategori Kampanye</label>
           <select
             name="kategoriId"
-            id="kategori_id"
+            id="kategoriId"
             required
             class="py-2 px-3 block w-full border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
           >
@@ -36,7 +36,7 @@
               Pilih Kategori
             </option>
             @each(kategori in kategoris)
-              <option value="{{ kategori.id }}" if @if(kampanye?.kategoriId == kategori.id) selected @end>
+              <option value="{{ kategori.id }}" {{ kampanye?.kategoriId === kategori.id ? 'selected' : '' }}>
                 {{ kategori.namaKategori }}
               </option>
             @end

@@ -4,9 +4,6 @@ import { registerValidator } from '#validators/register'
 import { loginValidator } from '#validators/login'
 
 export default class AuthController {
-  /**
-   * Show the registration form
-   */
 
   async showLogin({ view }: HttpContext) {
     return view.render('auth/login')
@@ -51,7 +48,7 @@ export default class AuthController {
     }
   }
 
-  async logout({ auth, response, session }: HttpContext) {
+  async logout({ auth, response }: HttpContext) {
     await auth.use('web').logout()
     return response.redirect().toRoute('login')
   }

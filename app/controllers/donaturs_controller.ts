@@ -1,5 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Donatur from '#models/donatur'
+import db from '@adonisjs/lucid/services/db'
+
 
 export default class DonatursController {
   public async index({ view }: HttpContext) {
@@ -30,7 +32,15 @@ export default class DonatursController {
       })
       .firstOrFail()
 
-    return view.render('pages/donatur/show', { donatur })
+    // Hitung total donasi terverifikasi
+    const totalDonasiTerverifikasi = await db.from('donasis') // Mengakses tabel 'donasis'
+      .join('transaksi_donasis', 'donasis.id', '=', 'transaksi_donasis.donasi_id') // Menggabungkan dengan tabel 'transaksi_donasis'
+      .where('donasis.donatur_id', params.id) // Memfilter berdasarkan donatur yang sedang dilihat
+      .where('transaksi_donasis.status', 'terverifikasi') // Memfilter donasi yang statusnya 'terverifikasi'
+      .sum('jumlah as total') // Menjumlahkan kolom 'jumlah'
+      .first() // Mengambil hasil pertama dari agregasi
+
+    return view.render('pages/donatur/show', { donatur, totalDonasiTerverifikasi: totalDonasiTerverifikasi.total || 0 })
   }
 
   public async edit({ view, params }: HttpContext) {
